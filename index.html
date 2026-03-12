@@ -232,7 +232,8 @@
                 </div>
                 <span class="text-xs bg-gray-800 text-gray-300 py-1 px-2 rounded shrink-0 hidden sm:inline-block">Historische Entwicklung</span>
             </div>
-            <div class="h-64 relative w-full mt-2">
+            <!-- Höhe deutlich vergrößert für weniger Stauchung -->
+            <div class="h-[400px] relative w-full mt-2">
                 <canvas id="weeklyChart"></canvas>
             </div>
         </div>
@@ -793,7 +794,10 @@
                     scales: {
                         x: { 
                             grid: { color: '#333', drawBorder: false },
-                            ticks: { color: '#9ca3af' }
+                            ticks: { 
+                                color: '#9ca3af',
+                                font: { size: 9 } // Schriftgröße um ca. 30% verkleinert
+                            }
                         },
                         y: {
                             type: 'linear',
