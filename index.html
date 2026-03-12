@@ -103,7 +103,7 @@
         }
     </style>
 </head>
-<body class="p-6 md:p-10 font-sans min-h-screen">
+<body class="p-6 md:p-10 font-sans min-h-screen relative">
 
     <!-- Header mit GREYHOUND Logo -->
     <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 border-b border-gray-800 pb-6">
@@ -135,8 +135,11 @@
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
-        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
-            <div>
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
+            <button onclick="openInfoModal('mrr')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <div class="pr-6">
                 <h3 class="text-gray-400 text-sm font-medium mb-1">Total KI MRR (Aktiv)</h3>
                 <div class="text-3xl font-bold text-white" id="kpi-mrr">0 €</div>
             </div>
@@ -145,8 +148,11 @@
             </div>
         </div>
         
-        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
-            <div>
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
+            <button onclick="openInfoModal('bookings')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <div class="pr-6">
                 <h3 class="text-gray-400 text-sm font-medium mb-1">Verträge mit KI-Buchung</h3>
                 <div class="text-3xl font-bold text-white" id="kpi-bookings">0</div>
             </div>
@@ -155,8 +161,11 @@
             </div>
         </div>
 
-        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
-            <div>
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
+            <button onclick="openInfoModal('culs')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <div class="pr-6">
                 <h3 class="text-gray-400 text-sm font-medium mb-1">KI-gestützte Lizenzen (CULs)</h3>
                 <div class="text-3xl font-bold text-white" id="kpi-culs">0</div>
             </div>
@@ -165,8 +174,11 @@
             </div>
         </div>
 
-        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
-            <div>
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
+            <button onclick="openInfoModal('adoption')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <div class="pr-6">
                 <h3 class="text-gray-400 text-sm font-medium mb-1">Adoption (Upsell vs. Neu)</h3>
                 <div class="text-3xl font-bold text-white" id="kpi-upsell">0% / 0%</div>
             </div>
@@ -176,8 +188,11 @@
             </div>
         </div>
 
-        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
-            <div>
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
+            <button onclick="openInfoModal('churn')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <div class="pr-6">
                 <h3 class="text-gray-400 text-sm font-medium mb-1">Value-to-Churn</h3>
                 <div class="text-3xl font-bold text-white" id="kpi-churn">0</div>
             </div>
@@ -190,7 +205,7 @@
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
         
-        <!-- Weekly Trend Chart (Nimmt 2/3 des Platzes ein) -->
+        <!-- Weekly Trend Chart -->
         <div class="signature-border p-6 relative lg:col-span-2">
             <div class="flex justify-between items-start mb-4">
                 <div>
@@ -229,8 +244,124 @@
         Hinweis zur Datenbasis: Partner- und interne Testverträge (erkennbar am <span class="text-white font-medium">0,00 € MRR</span>) werden vom Dashboard automatisch herausgefiltert und in <u>keiner</u> der dargestellten Metriken berücksichtigt.
     </footer>
 
+    <!-- Info Modal (Floating & Draggable) -->
+    <div id="infoModal" class="fixed z-[100] hidden signature-border p-6 max-w-md w-full shadow-[0_0_40px_rgba(0,0,0,0.7)] bg-ghSurface border border-gray-800">
+        <!-- Header / Drag Handle -->
+        <div id="modalHeader" class="cursor-move pb-3 mb-4 border-b border-gray-800 flex justify-between items-center select-none" title="Fenster verschieben">
+            <h2 id="modalTitle" class="text-xl font-bold text-white text-gradient pointer-events-none">KPI Titel</h2>
+            <button type="button" onclick="closeInfoModal()" class="text-gray-500 hover:text-white focus:outline-none transition-colors" title="Schließen">
+                <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <div id="modalContent" class="text-gray-300 text-sm leading-relaxed space-y-3">
+            <!-- Text wird per JS eingefügt -->
+        </div>
+        
+        <div class="mt-6 text-right">
+            <button type="button" onclick="closeInfoModal()" class="btn-primary px-6 py-2 text-sm cursor-pointer">Schließen</button>
+        </div>
+    </div>
+
     <!-- App Logic -->
     <script>
+        // Modal Texte Definitionen
+        const kpiExplanations = {
+            'mrr': {
+                title: 'Total KI MRR (Aktiv)',
+                text: '<p>Dies ist die <strong>Summe der monatlich wiederkehrenden Umsätze (MRR)</strong> aller aktiven KI-Verträge aus dem hochgeladenen Datenexport.</p><p><strong>Besonderheit:</strong> Partner- und Testverträge (erkennbar am Wert 0,00 € in der MRR-Spalte) werden von der gesamten Dashboard-Logik automatisch herausgefiltert. Diese Kachel zeigt dir somit ein absolut klares und bereinigtes Bild des echten, zahlungsrelevanten Umsatzes, den die KI-Produkte generieren.</p>'
+            },
+            'bookings': {
+                title: 'Verträge mit KI-Buchung',
+                text: '<p>Diese Kachel zeigt die <strong>absolute Anzahl aller aktiven Kundenverträge</strong>, in denen aktuell ein kostenpflichtiges KI-Produkt (AI Pack oder AI Human Assist) gebucht ist.</p><p>Der Wert in Klammern gibt dir direkt Auskunft darüber, wie viele dieser aktiven Verträge sich derzeit noch in der hinterlegten <strong>Testphase (Evaluierung)</strong> befinden.</p><p><em>Tipp:</em> Genauso wie beim Umsatz sind hier interne Testaccounts und Partner (0€ MRR) von der Zählung ausgeschlossen.</p>'
+            },
+            'culs': {
+                title: 'KI-gestützte Lizenzen (CULs)',
+                text: '<p>Hier wird die <strong>Anzahl der gebuchten Nutzerlizenzen (Concurrent User Licenses)</strong> summiert – bezogen auf alle Verträge, die ein KI-Produkt aktiv haben.</p><p><strong>Warum diese Zahl wichtig ist:</strong> Sie gibt Aufschluss über die theoretische Reichweite unserer KI-Features. Sie beantwortet im SteerCo die Frage: <em>"Wie viele Mitarbeiter bei unseren Kunden arbeiten potenziell täglich mit unseren KI-Assistenzfunktionen?"</em></p>'
+            },
+            'adoption': {
+                title: 'Adoption (Upsell vs. Neu)',
+                text: '<p>Diese Metrik beantwortet die strategische Frage: <em>An wen verkaufen wir die KI eigentlich primär?</em> Die Buchungen werden hierfür in zwei Prozentwerte aufgeteilt:</p><ul class="list-disc pl-4 mt-2 space-y-1"><li><strong>Upsell (Bestandskunden):</strong> Kunden, die GREYHOUND bereits seit längerem nutzen und die KI nachträglich hinzugebucht haben. (Logik: Die KI-Buchung fand mehr als 30 Tage nach Vertragsbeginn statt).</li><li><strong>Neu (Neukunden):</strong> Kunden, die GREYHOUND einführen und die KI direkt beim Start mitbuchen. (Logik: Die Differenz zwischen Vertragsbeginn und KI-Buchung beträgt maximal 30 Tage).</li></ul>'
+            },
+            'churn': {
+                title: 'Value-to-Churn',
+                text: '<p>Ein sehr spezifischer und wichtiger <strong>Warn-Indikator (Churn-Risiko)</strong>.</p><p>Diese Zahl summiert alle Verträge, bei denen das hinterlegte Datum unter <em>"Produkttest_bis"</em> exakt mit dem Datum unter <em>"Produkt_gekündigt_zum"</em> übereinstimmt.</p><p><strong>Bedeutung:</strong> Das sind Kunden, die das KI-Produkt ausprobiert haben, aber <em>direkt</em> zum Ende der kostenfreien Evaluierungsphase wieder kündigen. Sie haben während des Tests offensichtlich nicht genügend Mehrwert (Value) erkannt, um in das Bezahlmodell zu wechseln. Hier sollte Customer Success genauer hinschauen.</p>'
+            }
+        };
+
+        // Modal Steuerung
+        const modal = document.getElementById('infoModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+
+        function openInfoModal(kpiKey) {
+            const data = kpiExplanations[kpiKey];
+            if (data) {
+                modalTitle.innerHTML = data.title;
+                modalContent.innerHTML = data.text;
+                
+                // Modal einblenden
+                modal.classList.remove('hidden');
+                
+                // Fenster beim allerersten Öffnen grob zentrieren, danach behält es die gezogene Position
+                if (!modal.style.top && !modal.style.left) {
+                    const rect = modal.getBoundingClientRect();
+                    modal.style.top = Math.max(20, (window.innerHeight / 2 - rect.height / 2)) + 'px';
+                    modal.style.left = Math.max(20, (window.innerWidth / 2 - rect.width / 2)) + 'px';
+                }
+            }
+        }
+
+        function closeInfoModal() {
+            modal.classList.add('hidden');
+        }
+
+        // Drag & Drop Logik für das Modal
+        dragElement(document.getElementById("infoModal"));
+
+        function dragElement(elmnt) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const header = document.getElementById("modalHeader");
+            
+            if (header) {
+                header.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                // Klicks auf Buttons im Header nicht als "Ziehen" werten
+                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+                
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Neue Position berechnen
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                // Element verschieben
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                // Dragging beenden, wenn Maus losgelassen wird
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // --- Ende Modal Logik ---
+
         // Chart Instances
         let productChartInstance = null;
         let statusChartInstance = null;
@@ -353,23 +484,18 @@
             
             document.getElementById('kpi-churn').innerText = valueToChurnCount;
 
-            // Prozentwerte für Produktverteilung berechnen
-            const totalProducts = aiPackCount + aiHumanCount;
-            const packPerc = totalProducts > 0 ? Math.round((aiPackCount / totalProducts) * 100) : 0;
-            const humanPerc = totalProducts > 0 ? Math.round((aiHumanCount / totalProducts) * 100) : 0;
-
             // Charts zeichnen
-            renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings, packPerc, humanPerc);
+            renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings);
             renderWeeklyTrendChart(weeklyDataMap);
         }
 
-        function renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings, packPerc, humanPerc) {
+        function renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings) {
             if(productChartInstance) productChartInstance.destroy();
             const ctxProd = document.getElementById('productChart').getContext('2d');
             productChartInstance = new Chart(ctxProd, {
                 type: 'doughnut',
                 data: {
-                    labels: [`AI Pack (${packPerc}%)`, `AI Human Assist (${humanPerc}%)`],
+                    labels: ['AI Pack', 'AI Human Assist'],
                     datasets: [{
                         data: [aiPackCount, aiHumanCount],
                         backgroundColor: ['#00ffc0', '#ab4ef0'],
@@ -504,7 +630,7 @@
             Chart.defaults.font.family = 'Outfit, sans-serif';
 
             // Initiale leere Charts zeichnen
-            renderDonutCharts(0, 0, 0, 0, 0, 0);
+            renderDonutCharts(0, 0, 0, 0);
             renderWeeklyTrendChart(new Map());
         });
 
