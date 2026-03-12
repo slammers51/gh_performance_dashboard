@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREYHOUND AI Products - SteerCo Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PapaParse für CSV Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Google Fonts: Outfit (Fallback für Oscine) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        ghBlack: '#050505',
+                        ghSurface: '#111111',
+                        ghCyan: '#00ffc0',
+                        ghViolet: '#ab4ef0',
+                        ghMagenta: '#fb3bfb',
+                        ghNeon: '#f0ff00'
+                    },
+                    backgroundImage: {
+                        'signature-gradient': 'linear-gradient(90deg, #00ffc0 0%, #ab4ef0 50%, #fb3bfb 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #FFFFFF;
+        }
+        
+        .signature-border {
+            position: relative;
+            background: #111111;
+            border-radius: 16px;
+        }
+        
+        .signature-border::before {
+            content: "";
+            position: absolute;
+            inset: 0px;
+            border-radius: 16px;
+            padding: 1px;
+            background: #333333;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 0;
+            transition: all 0.3s ease;
+        }
+
+        .signature-border:hover::before {
+            inset: -3px;
+            border-radius: 19px;
+            padding: 3px;
+            background: linear-gradient(90deg, #00ffc0 0%, #ab4ef0 50%, #fb3bfb 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, #00ffc0 0%, #ab4ef0 50%, #fb3bfb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ambient-glow {
+            box-shadow: 0 0 20px rgba(0, 255, 192, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #f0ff00;
+            color: #000000;
+            border-radius: 9999px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 0 15px rgba(240, 255, 0, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        /* Custom File Input Styling */
+        input[type="file"] {
+            display: none;
+        }
+        .file-upload-label {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10 font-sans min-h-screen">
+
+    <!-- Header mit GREYHOUND Logo -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 border-b border-gray-800 pb-6">
+        <div class="flex items-center gap-4">
+            <!-- GREYHOUND Logo (SVG) in reinweiß -->
+            <svg id="greyhound--logo-mobile" class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 57 57">
+                <path fill="#FFFFFF" d="M57 23c0-3.5-.2-7.4-.5-8.9-.5-2.9-1.3-6.3-4.3-9.3C49 1.8 45.7 1 42.9.5 41.5.2 37.4.2 34 0h-5.5s-7.8 0-12.2.2c-1 0-1.9.2-2.4.2-2.9.5-6.3 1.3-9.3 4.3C1.6 7.9.8 11.2.3 14 0 16.8 0 27.7 0 28.5c0 .8 0 11.7.5 14.4.5 2.8 1.3 6.3 4.3 9.3 3.2 3 6.5 3.8 9.3 4.3 2.2.3 10.6.5 13.5.5h3.7c2.7 0 6.6 0 9.5-.2.9 0 1.9-.2 2.4-.2 2.8-.5 6.3-1.3 9.3-4.3 3-3.2 3.8-6.5 4.3-9.3.2-2.8.2-13.7.2-14.5V23zM20.3 43.5 11 38.1V17.9l5.5-3.2 9.3 5.4-5.5 3.2v20.2zm26.2-5.2L28.7 48.6l-5.5-3.2v-11l5.5 3.2 17.9-10.3v11zm0-14.2-9.3 5.4v-6.3L19.6 13 29 7.6l17.6 10.1c-.1 0-.1 6.4-.1 6.4z"></path>
+            </svg>
+
+            <div class="hidden md:block h-10 w-px bg-gray-800 ml-2"></div>
+
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight mb-0.5"><span class="text-gradient">AI Performance</span></h1>
+                <div class="flex items-center gap-2">
+                    <p class="text-gray-400 text-xs uppercase tracking-wider font-semibold">SteerCo Reporting</p>
+                    <span id="dataTimestamp" class="text-ghCyan text-xs hidden border-l border-gray-600 pl-2 py-0.5">Keine Daten geladen</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex flex-col items-start md:items-end gap-3 w-full md:w-auto mt-4 md:mt-0">
+            <label class="file-upload-label btn-primary px-6 py-2.5 text-sm w-full md:w-auto justify-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                Aktuelle CSV laden
+                <input type="file" id="csvFileInput" accept=".csv">
+            </label>
+        </div>
+    </header>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
+            <div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Total KI MRR (Aktiv)</h3>
+                <div class="text-3xl font-bold text-white" id="kpi-mrr">0 €</div>
+            </div>
+            <div class="mt-3 text-xs text-gray-500 leading-tight">
+                Summe der Spalte 'MRR' aller Verträge mit Status 'Aktiv'.
+            </div>
+        </div>
+        
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
+            <div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Verträge mit KI-Buchung</h3>
+                <div class="text-3xl font-bold text-white" id="kpi-bookings">0</div>
+            </div>
+            <div class="mt-3 text-xs text-gray-500 leading-tight">
+                Anzahl aller KI-Verträge mit Status 'Aktiv'. <span id="kpi-bookings-sub" class="text-ghCyan font-medium"></span>
+            </div>
+        </div>
+
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
+            <div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">KI-gestützte Lizenzen (CULs)</h3>
+                <div class="text-3xl font-bold text-white" id="kpi-culs">0</div>
+            </div>
+            <div class="mt-3 text-xs text-gray-500 leading-tight">
+                Summe der Spalte 'CULs' (Concurrent User Licenses) aller aktiven Verträge. Zeigt die theoretische Nutzerreichweite.
+            </div>
+        </div>
+
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
+            <div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Adoption (Upsell vs. Neu)</h3>
+                <div class="text-3xl font-bold text-white" id="kpi-upsell">0% / 0%</div>
+            </div>
+            <div class="mt-3 text-xs text-gray-500 leading-tight">
+                <span class="text-gray-400 font-medium">Upsell:</span> KI-Buchung >30 Tage nach Basis-Vertrag.<br>
+                <span class="text-gray-400 font-medium">Neu:</span> KI direkt bei Start mitgebucht (&lt;30 Tage).
+            </div>
+        </div>
+
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between">
+            <div>
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Value-to-Churn</h3>
+                <div class="text-3xl font-bold text-white" id="kpi-churn">0</div>
+            </div>
+            <div class="mt-3 text-xs text-gray-500 leading-tight">
+                Kündigungen <span class="text-gray-400 font-medium">exakt</span> zum Ende der Testphase. Indikator für fehlenden erlebten Mehrwert.
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+        
+        <!-- Weekly Trend Chart (Nimmt 2/3 des Platzes ein) -->
+        <div class="signature-border p-6 relative lg:col-span-2">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-lg font-bold">Wöchentliches Wachstum (KW-Trend)</h3>
+                    <p class="text-xs text-gray-400 mt-1 max-w-md">Visualisiert den Zuwachs an gebuchten KI-Produkten pro Kalenderwoche (Balken) und den kumulierten Anstieg des MRR (Linie). Stichtag ist das Datum der Buchung.</p>
+                </div>
+                <span class="text-xs bg-gray-800 text-gray-300 py-1 px-2 rounded shrink-0">Historische Entwicklung</span>
+            </div>
+            <div class="h-64 relative w-full mt-2">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-6 lg:col-span-1">
+            <!-- Chart 1: Product Distribution -->
+            <div class="signature-border p-6 relative flex-1">
+                <h3 class="text-md font-bold mb-2">Produkt-Verteilung</h3>
+                <div class="h-32 relative w-full flex justify-center">
+                    <canvas id="productChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Chart 2: Test vs Active -->
+            <div class="signature-border p-6 relative flex-1">
+                <h3 class="text-md font-bold mb-2">Vertrags-Status</h3>
+                <div class="h-32 relative w-full flex justify-center">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fußnote (0€ Verträge) -->
+    <footer class="mt-8 mb-4 border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
+        <span class="text-ghCyan font-bold mr-1">*</span> 
+        Hinweis zur Datenbasis: Partner- und interne Testverträge (erkennbar am <span class="text-white font-medium">0,00 € MRR</span>) werden vom Dashboard automatisch herausgefiltert und in <u>keiner</u> der dargestellten Metriken berücksichtigt.
+    </footer>
+
+    <!-- App Logic -->
+    <script>
+        // Chart Instances
+        let productChartInstance = null;
+        let statusChartInstance = null;
+        let weeklyChartInstance = null;
+
+        // Hilfsfunktion: MRR als Float parsen
+        function parseMRR(mrrString) {
+            if (!mrrString) return 0;
+            const cleaned = mrrString.replace(' €', '').replace(/\./g, '').replace(',', '.');
+            return parseFloat(cleaned) || 0;
+        }
+
+        // Hilfsfunktion: Datum parsen (DD.MM.YYYY -> Date)
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('.');
+            if (parts.length === 3) {
+                return new Date(parts[2], parts[1] - 1, parts[0]);
+            }
+            return null;
+        }
+
+        // Hilfsfunktion: Finde den Montag einer Woche für das Grouping
+        function getMonday(d) {
+            const date = new Date(d);
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Anpassen falls Sonntag (0)
+            const monday = new Date(date.setDate(diff));
+            monday.setHours(0,0,0,0);
+            return monday;
+        }
+
+        // Hilfsfunktion: KW String generieren (KW X/YYYY)
+        function getWeekString(d) {
+            const date = new Date(d.getTime());
+            date.setHours(0, 0, 0, 0);
+            date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+            const week1 = new Date(date.getFullYear(), 0, 4);
+            const weekNumber = 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+            return `KW ${weekNumber}`;
+        }
+
+        // CSV Verarbeiten und UI updaten
+        function processData(data) {
+            let totalMRR = 0;
+            let activeBookings = 0;
+            let evalBookings = 0;
+            let totalCULs = 0;
+            
+            let aiPackCount = 0;
+            let aiHumanCount = 0;
+
+            let newKundeCount = 0;
+            let upsellCount = 0;
+            
+            let valueToChurnCount = 0;
+
+            // Für das wöchentliche Historien-Chart
+            const weeklyDataMap = new Map();
+
+            data.forEach(row => {
+                if (!row.Vertragsnummer) return; 
+                if (row.Status !== 'Aktiv') return; 
+
+                const mrr = parseMRR(row.MRR);
+                
+                // NEU: Partner- und Testverträge konsequent herausfiltern (0 € MRR)
+                if (mrr === 0) return; 
+
+                const culs = parseInt(row.CULs) || 0;
+                
+                // KPIs
+                totalMRR += mrr;
+                activeBookings++;
+                totalCULs += culs;
+
+                if (row.Produkttest_bis !== "") evalBookings++;
+                if (row.Produktname === 'AI Pack') aiPackCount++;
+                if (row.Produktname === 'AI Human Assist') aiHumanCount++;
+                
+                // Value-to-Churn Logik: Testende = Kündigungsdatum
+                if (row.Produkttest_bis !== "" && row.Produkttest_bis === row.Produkt_gekündigt_zum) {
+                    valueToChurnCount++;
+                }
+
+                const gebucht = parseDate(row.Produkt_gebucht_am);
+                const erstellt = parseDate(row.Vertrag_erstellt_am);
+                
+                if (gebucht && erstellt) {
+                    const diffDays = (gebucht - erstellt) / (1000 * 60 * 60 * 24);
+                    if (diffDays > 30) upsellCount++;
+                    else newKundeCount++;
+                }
+
+                // Daten für Wochen-Chart aggregieren
+                if (gebucht) {
+                    const monday = getMonday(gebucht);
+                    const timestamp = monday.getTime();
+                    
+                    if (!weeklyDataMap.has(timestamp)) {
+                        weeklyDataMap.set(timestamp, { count: 0, mrr: 0, date: monday });
+                    }
+                    
+                    const weekData = weeklyDataMap.get(timestamp);
+                    weekData.count += 1;
+                    weekData.mrr += mrr;
+                }
+            });
+
+            // UI Updaten: KPI Cards
+            document.getElementById('kpi-mrr').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(totalMRR);
+            document.getElementById('kpi-bookings').innerText = activeBookings;
+            document.getElementById('kpi-bookings-sub').innerText = `(Davon ${evalBookings} aktuell in Testphase)`;
+            document.getElementById('kpi-culs').innerText = totalCULs;
+            
+            const totalAdoption = newKundeCount + upsellCount;
+            const upsellPerc = totalAdoption > 0 ? Math.round((upsellCount / totalAdoption) * 100) : 0;
+            const newPerc = totalAdoption > 0 ? Math.round((newKundeCount / totalAdoption) * 100) : 0;
+            document.getElementById('kpi-upsell').innerText = `${upsellPerc}% / ${newPerc}%`;
+            
+            document.getElementById('kpi-churn').innerText = valueToChurnCount;
+
+            // Prozentwerte für Produktverteilung berechnen
+            const totalProducts = aiPackCount + aiHumanCount;
+            const packPerc = totalProducts > 0 ? Math.round((aiPackCount / totalProducts) * 100) : 0;
+            const humanPerc = totalProducts > 0 ? Math.round((aiHumanCount / totalProducts) * 100) : 0;
+
+            // Charts zeichnen
+            renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings, packPerc, humanPerc);
+            renderWeeklyTrendChart(weeklyDataMap);
+        }
+
+        function renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings, packPerc, humanPerc) {
+            if(productChartInstance) productChartInstance.destroy();
+            const ctxProd = document.getElementById('productChart').getContext('2d');
+            productChartInstance = new Chart(ctxProd, {
+                type: 'doughnut',
+                data: {
+                    labels: [`AI Pack (${packPerc}%)`, `AI Human Assist (${humanPerc}%)`],
+                    datasets: [{
+                        data: [aiPackCount, aiHumanCount],
+                        backgroundColor: ['#00ffc0', '#ab4ef0'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'right', labels: { color: '#fff', font: {size: 11} } }
+                    },
+                    cutout: '65%'
+                }
+            });
+
+            if(statusChartInstance) statusChartInstance.destroy();
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            const festeBuchungen = activeBookings - evalBookings;
+            statusChartInstance = new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: [`Feste Buchung (${festeBuchungen})`, `Testphase (${evalBookings})`],
+                    datasets: [{
+                        data: [festeBuchungen, evalBookings],
+                        backgroundColor: ['#fb3bfb', '#333333'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'right', labels: { color: '#fff', font: {size: 11} } }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        function renderWeeklyTrendChart(weeklyDataMap) {
+            // Sortieren der Wochen chronologisch
+            const sortedKeys = Array.from(weeklyDataMap.keys()).sort();
+            
+            const labels = [];
+            const newBookingsData = [];
+            const cumulativeMrrData = [];
+            
+            let currentCumMrr = 0;
+
+            sortedKeys.forEach(timestamp => {
+                const data = weeklyDataMap.get(timestamp);
+                labels.push(getWeekString(data.date));
+                newBookingsData.push(data.count);
+                
+                currentCumMrr += data.mrr;
+                cumulativeMrrData.push(currentCumMrr);
+            });
+
+            if(weeklyChartInstance) weeklyChartInstance.destroy();
+            const ctxWeekly = document.getElementById('weeklyChart').getContext('2d');
+            
+            weeklyChartInstance = new Chart(ctxWeekly, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: 'Kumulierter MRR (€)',
+                            data: cumulativeMrrData,
+                            borderColor: '#00ffc0',
+                            backgroundColor: 'rgba(0, 255, 192, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true,
+                            yAxisID: 'y1'
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Neue Buchungen (pro Woche)',
+                            data: newBookingsData,
+                            backgroundColor: '#ab4ef0',
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { color: '#fff' } },
+                        tooltip: { backgroundColor: '#111111', titleColor: '#fff', bodyColor: '#ccc', borderColor: '#333', borderWidth: 1 }
+                    },
+                    scales: {
+                        x: { 
+                            grid: { color: '#333', drawBorder: false },
+                            ticks: { color: '#9ca3af' }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            grid: { color: '#333', drawBorder: false },
+                            ticks: { color: '#9ca3af', stepSize: 1 }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false }, // Verhindert doppelte Grid-Linien
+                            ticks: { 
+                                color: '#00ffc0',
+                                callback: function(value) { return value + ' €'; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Init mit leeren Werten (warten auf Upload)
+        window.addEventListener('DOMContentLoaded', () => {
+            Chart.defaults.color = '#a3a3a3';
+            Chart.defaults.font.family = 'Outfit, sans-serif';
+
+            // Initiale leere Charts zeichnen
+            renderDonutCharts(0, 0, 0, 0, 0, 0);
+            renderWeeklyTrendChart(new Map());
+        });
+
+        // File Upload Handling
+        document.getElementById('csvFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Update UI mit Zeitstempel
+            const dateObj = new Date(file.lastModified);
+            const tsElement = document.getElementById('dataTimestamp');
+            tsElement.innerText = `Datenstand: ${dateObj.toLocaleDateString('de-DE')} um ${dateObj.toLocaleTimeString('de-DE', {hour: '2-digit', minute:'2-digit'})} Uhr`;
+            tsElement.classList.remove('hidden');
+
+            Papa.parse(file, {
+                header: true,
+                delimiter: ";",
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processData(results.data);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
