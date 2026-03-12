@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <!-- PapaParse für CSV Parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <!-- Google Fonts: Outfit (Fallback für Oscine) -->
@@ -26,7 +27,8 @@
                         ghCyan: '#00ffc0',
                         ghViolet: '#ab4ef0',
                         ghMagenta: '#fb3bfb',
-                        ghNeon: '#f0ff00'
+                        ghNeon: '#f0ff00',
+                        ghRed: '#ff3366'
                     },
                     backgroundImage: {
                         'signature-gradient': 'linear-gradient(90deg, #00ffc0 0%, #ab4ef0 50%, #fb3bfb 100%)',
@@ -134,9 +136,9 @@
     </header>
 
     <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
-            <button onclick="openInfoModal('mrr')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+            <button onclick="openInfoModal('mrr')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </button>
             <div class="pr-6">
@@ -149,7 +151,20 @@
         </div>
         
         <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
-            <button onclick="openInfoModal('bookings')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+            <button onclick="openInfoModal('mrrClean')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <div class="pr-6">
+                <h3 class="text-gray-400 text-sm font-medium mb-1">Bereinigter KI MRR</h3>
+                <div class="text-3xl font-bold text-white" id="kpi-mrr-clean">0 €</div>
+            </div>
+            <div class="mt-3 text-xs text-gray-500 leading-tight">
+                Garantierter MRR: Ohne laufende Testphasen und abzüglich bereits bekannter künftiger Kündigungen.
+            </div>
+        </div>
+
+        <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
+            <button onclick="openInfoModal('bookings')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </button>
             <div class="pr-6">
@@ -162,7 +177,7 @@
         </div>
 
         <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
-            <button onclick="openInfoModal('culs')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+            <button onclick="openInfoModal('culs')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </button>
             <div class="pr-6">
@@ -175,7 +190,7 @@
         </div>
 
         <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
-            <button onclick="openInfoModal('adoption')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+            <button onclick="openInfoModal('adoption')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </button>
             <div class="pr-6">
@@ -189,7 +204,7 @@
         </div>
 
         <div class="signature-border ambient-glow p-5 flex flex-col justify-between relative group">
-            <button onclick="openInfoModal('churn')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none" title="Details anzeigen">
+            <button onclick="openInfoModal('churn')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </button>
             <div class="pr-6">
@@ -212,8 +227,8 @@
             </button>
             <div class="flex justify-between items-start mb-4 pr-8">
                 <div>
-                    <h3 class="text-lg font-bold">Wöchentliches Wachstum (KW-Trend)</h3>
-                    <p class="text-xs text-gray-400 mt-1 max-w-md">Visualisiert den Zuwachs an gebuchten KI-Produkten pro Kalenderwoche (Balken) und den kumulierten Anstieg des MRR (Linie). Stichtag ist das Datum der Buchung.</p>
+                    <h3 class="text-lg font-bold">Wöchentliches Wachstum (Netto MRR Trend)</h3>
+                    <p class="text-xs text-gray-400 mt-1 max-w-md">Zeigt die reale Netto-Entwicklung: Neue KI-Buchungen vs. Kündigungen und den daraus resultierenden Gesamt-MRR pro Kalenderwoche.</p>
                 </div>
                 <span class="text-xs bg-gray-800 text-gray-300 py-1 px-2 rounded shrink-0 hidden sm:inline-block">Historische Entwicklung</span>
             </div>
@@ -280,7 +295,7 @@
             </div>
             
             <div class="px-6 py-5 text-right border-t border-gray-800 bg-[#111111]">
-                <button type="button" onclick="closeInfoModal()" class="btn-primary px-6 py-2 text-sm cursor-pointer">Schließen</button>
+                <button type="button" onclick="closeInfoModal()" class="btn-primary px-6 py-2 text-sm cursor-pointer relative z-10">Schließen</button>
             </div>
         </div>
     </div>
@@ -292,6 +307,10 @@
             'mrr': {
                 title: 'Total KI MRR (Aktiv)',
                 text: '<p>Dies ist die <strong>Summe der monatlich wiederkehrenden Umsätze (MRR)</strong> aller aktiven KI-Verträge aus dem hochgeladenen Datenexport.</p><p><strong>Besonderheit:</strong> Partner- und Testverträge (erkennbar am Wert 0,00 € in der MRR-Spalte) werden von der gesamten Dashboard-Logik automatisch herausgefiltert. Diese Kachel zeigt dir somit ein absolut klares und bereinigtes Bild des echten, zahlungsrelevanten Umsatzes, den die KI-Produkte generieren.</p>'
+            },
+            'mrrClean': {
+                title: 'Bereinigter KI MRR',
+                text: '<p>Dies ist der <strong>garantierte und feste Umsatz</strong>.</p><p>Er nimmt den regulären aktiven MRR und zieht zwei Risiko-Faktoren ab:</p><ul class="list-disc pl-4 mt-2 space-y-1"><li><strong>Laufende Testphasen:</strong> Umsatz aus Verträgen, die noch in Evaluierung sind.</li><li><strong>Pending Churn:</strong> Umsatz aus aktiven Verträgen, bei denen in der Zukunft bereits ein Kündigungsdatum eingetragen ist.</li></ul><p>Diese Zahl ist dein "sicherer Hafen" für die solide finanzielle Planung.</p>'
             },
             'bookings': {
                 title: 'Verträge mit KI-Buchung',
@@ -307,15 +326,15 @@
             },
             'churn': {
                 title: 'Value-to-Churn',
-                text: '<p>Ein sehr spezifischer und wichtiger <strong>Warn-Indikator (Churn-Risiko)</strong>.</p><p>Diese Zahl summiert alle Verträge, bei denen das hinterlegte Datum unter <em>"Produkttest_bis"</em> exakt mit dem Datum unter <em>"Produkt_gekündigt_zum"</em> übereinstimmt.</p><p><strong>Bedeutung:</strong> Das sind Kunden, die das KI-Produkt ausprobiert haben, aber <em>direkt</em> zum Ende der kostenfreien Evaluierungsphase wieder kündigen. Sie haben während des Tests offensichtlich nicht genügend Mehrwert (Value) erkannt, um in das Bezahlmodell zu wechseln. Hier sollte Customer Success genauer hinschauen.</p>'
+                text: '<p>Ein sehr spezifischer und wichtiger <strong>Warn-Indikator (Churn-Risiko)</strong>.</p><p>Diese Zahl summiert alle Verträge (auch geschlossene), bei denen das hinterlegte Datum unter <em>"Produkttest_bis"</em> exakt mit dem Datum unter <em>"Produkt_gekündigt_zum"</em> übereinstimmt.</p><p><strong>Bedeutung:</strong> Das sind Kunden, die das KI-Produkt ausprobiert haben, aber <em>direkt</em> zum Ende der kostenfreien Evaluierungsphase wieder kündigen. Sie haben während des Tests offensichtlich nicht genügend Mehrwert (Value) erkannt, um in das Bezahlmodell zu wechseln. Hier sollte Customer Success genauer hinschauen.</p>'
             },
             'weeklyTrend': {
-                title: 'Wöchentliches Wachstum (KW-Trend)',
-                text: '<p>Dieses Diagramm zeigt die <strong>Entwicklung der KI-Adoption</strong> über die Zeit.</p><ul class="list-disc pl-4 mt-2 space-y-1"><li><strong>Balken (Violett):</strong> Zeigen die absolute Anzahl der neu hinzugekommenen KI-Verträge in der jeweiligen Kalenderwoche.</li><li><strong>Linie (Cyan):</strong> Stellt das Wachstum des kumulierten KI-Umsatzes (MRR) im selben Zeitraum dar.</li></ul><p>Stichtag für die Zuordnung zu einer Kalenderwoche ist das exakte Datum der KI-Produktbuchung.</p>'
+                title: 'Wöchentliches Wachstum (Netto MRR Trend)',
+                text: '<p>Dieses Diagramm zeigt die <strong>echte Netto-Entwicklung (Net MRR)</strong> der KI-Adoption über die Zeit, inklusive aller Kündigungen (Churn).</p><ul class="list-disc pl-4 mt-2 space-y-1"><li><strong>Balken nach oben (Violett):</strong> Anzahl der neu hinzugekommenen KI-Verträge in der jeweiligen Kalenderwoche.</li><li><strong>Balken nach unten (Rot):</strong> Anzahl der beendeten Verträge/Testphasen (Churn) in der jeweiligen Kalenderwoche.</li><li><strong>Linie (Cyan):</strong> Stellt den kumulierten <em>Netto</em>-KI-Umsatz (MRR) dar. (Neuer MRR minus wegfallender MRR).</li></ul><p><em>Im Gegensatz zu den KPI-Kacheln (die nur den heutigen Ist-Zustand zeigen), werden hier auch bereits "Geschlossene" Verträge historisch korrekt berücksichtigt, um den wahren Geschäftsverlauf abzubilden.</em></p>'
             },
             'productDist': {
                 title: 'Produkt-Verteilung',
-                text: '<p>Veranschaulicht den <strong>Share of Wallet</strong> innerhalb unseres KI-Portfolios.</p><p>Es zeigt das Verhältnis aller aktiven Verträge, aufgeteilt auf unsere beiden Hauptprodukte: <strong>AI Pack</strong> und <strong>AI Human Assist</strong>.</p><p>Das hilft uns im SteerCo schnell zu bewerten, welches der beiden Produkte aktuell stärker nachgefragt wird.</p>'
+                text: '<p>Veranschaulicht den <strong>Share of Wallet</strong> innerhalb unseres KI-Portfolios.</p><p>Es zeigt das Verhältnis aller aktuell <em>aktiven</em> Verträge, aufgeteilt auf unsere beiden Hauptprodukte: <strong>AI Pack</strong> und <strong>AI Human Assist</strong>.</p><p>Das hilft uns im SteerCo schnell zu bewerten, welches der beiden Produkte derzeit stärker nachgefragt wird.</p>'
             },
             'statusDist': {
                 title: 'Vertrags-Status',
@@ -424,12 +443,14 @@
             date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
             const week1 = new Date(date.getFullYear(), 0, 4);
             const weekNumber = 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-            return `KW ${weekNumber}`;
+            const year = date.getFullYear().toString().slice(-2);
+            return `KW ${weekNumber}/${year}`;
         }
 
         // CSV Verarbeiten und UI updaten
-        function processData(data) {
+        function processData(data, fileTimestamp = null) {
             let totalMRR = 0;
+            let cleanMRR = 0;
             let activeBookings = 0;
             let evalBookings = 0;
             let totalCULs = 0;
@@ -442,60 +463,91 @@
             
             let valueToChurnCount = 0;
 
-            // Für das wöchentliche Historien-Chart
+            // Für das wöchentliche Historien-Chart (Netto MRR)
             const weeklyDataMap = new Map();
+
+            // Hilfsfunktion zur Initialisierung einer Woche
+            function initWeek(timestamp, dateObj) {
+                if (!weeklyDataMap.has(timestamp)) {
+                    weeklyDataMap.set(timestamp, { newCount: 0, newMrr: 0, churnCount: 0, churnMrr: 0, date: dateObj });
+                }
+            }
+
+            // Sicherstellen, dass die Kalenderwoche des Datei-Uploads auf der X-Achse existiert
+            const dataDate = fileTimestamp ? new Date(fileTimestamp) : new Date();
+            const dataMonday = getMonday(dataDate);
+            initWeek(dataMonday.getTime(), dataMonday);
+            const currentWeekStr = getWeekString(dataDate);
 
             data.forEach(row => {
                 if (!row.Vertragsnummer) return; 
-                if (row.Status !== 'Aktiv') return; 
 
                 const mrr = parseMRR(row.MRR);
-                
-                // NEU: Partner- und Testverträge konsequent herausfiltern (0 € MRR)
+                // Partner- und Testverträge konsequent aus ALLEN Metriken herausfiltern
                 if (mrr === 0) return; 
 
-                const culs = parseInt(row.CULs) || 0;
+                // --- 1. WÖCHENTLICHER TREND (Wertung ALLER Zeilen, auch geschlossene) ---
                 
-                // KPIs
-                totalMRR += mrr;
-                activeBookings++;
-                totalCULs += culs;
+                // Buchungen (Plus)
+                const gebucht = parseDate(row.Produkt_gebucht_am);
+                if (gebucht) {
+                    const ts = getMonday(gebucht).getTime();
+                    initWeek(ts, getMonday(gebucht));
+                    weeklyDataMap.get(ts).newCount += 1;
+                    weeklyDataMap.get(ts).newMrr += mrr;
+                }
 
-                if (row.Produkttest_bis !== "") evalBookings++;
-                if (row.Produktname === 'AI Pack') aiPackCount++;
-                if (row.Produktname === 'AI Human Assist') aiHumanCount++;
+                // Kündigungen / Churn (Minus)
+                // Nutze primär Produkt-Kündigung, ansonsten Vertrags-Kündigung als Fallback
+                let gekuendigt = parseDate(row.Produkt_gekündigt_zum);
+                if (!gekuendigt && row.Vertrag_gekuendigt_zum) {
+                    gekuendigt = parseDate(row.Vertrag_gekuendigt_zum);
+                }
                 
-                // Value-to-Churn Logik: Testende = Kündigungsdatum
+                if (gekuendigt) {
+                    const ts = getMonday(gekuendigt).getTime();
+                    initWeek(ts, getMonday(gekuendigt));
+                    weeklyDataMap.get(ts).churnCount += 1;
+                    weeklyDataMap.get(ts).churnMrr += mrr;
+                }
+
+                // Value-to-Churn Logik (Gilt auch für bereits geschlossene, da es ein Warn-Indikator ist)
                 if (row.Produkttest_bis !== "" && row.Produkttest_bis === row.Produkt_gekündigt_zum) {
                     valueToChurnCount++;
                 }
 
-                const gebucht = parseDate(row.Produkt_gebucht_am);
-                const erstellt = parseDate(row.Vertrag_erstellt_am);
+                // --- 2. SNAPSHOT KPIs (Nur aktuell "Aktiv") ---
+                if (row.Status !== 'Aktiv') return; 
+
+                const culs = parseInt(row.CULs) || 0;
                 
+                totalMRR += mrr;
+                activeBookings++;
+                totalCULs += culs;
+
+                const isTesting = row.Produkttest_bis !== "";
+                const isCancelling = row.Produkt_gekündigt_zum !== "" || row.Vertrag_gekuendigt_zum !== "";
+
+                // Bereinigter MRR: Zählt nur feste Verträge ohne Test und ohne hinterlegte Kündigung
+                if (!isTesting && !isCancelling) {
+                    cleanMRR += mrr;
+                }
+
+                if (isTesting) evalBookings++;
+                if (row.Produktname === 'AI Pack') aiPackCount++;
+                if (row.Produktname === 'AI Human Assist') aiHumanCount++;
+
+                const erstellt = parseDate(row.Vertrag_erstellt_am);
                 if (gebucht && erstellt) {
                     const diffDays = (gebucht - erstellt) / (1000 * 60 * 60 * 24);
                     if (diffDays > 30) upsellCount++;
                     else newKundeCount++;
                 }
-
-                // Daten für Wochen-Chart aggregieren
-                if (gebucht) {
-                    const monday = getMonday(gebucht);
-                    const timestamp = monday.getTime();
-                    
-                    if (!weeklyDataMap.has(timestamp)) {
-                        weeklyDataMap.set(timestamp, { count: 0, mrr: 0, date: monday });
-                    }
-                    
-                    const weekData = weeklyDataMap.get(timestamp);
-                    weekData.count += 1;
-                    weekData.mrr += mrr;
-                }
             });
 
             // UI Updaten: KPI Cards
             document.getElementById('kpi-mrr').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(totalMRR);
+            document.getElementById('kpi-mrr-clean').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cleanMRR);
             document.getElementById('kpi-bookings').innerText = activeBookings;
             document.getElementById('kpi-bookings-sub').innerText = `(Davon ${evalBookings} aktuell in Testphase)`;
             document.getElementById('kpi-culs').innerText = totalCULs;
@@ -507,18 +559,23 @@
             
             document.getElementById('kpi-churn').innerText = valueToChurnCount;
 
+            // Prozentwerte für Produktverteilung berechnen
+            const totalProducts = aiPackCount + aiHumanCount;
+            const packPerc = totalProducts > 0 ? Math.round((aiPackCount / totalProducts) * 100) : 0;
+            const humanPerc = totalProducts > 0 ? Math.round((aiHumanCount / totalProducts) * 100) : 0;
+
             // Charts zeichnen
-            renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings);
-            renderWeeklyTrendChart(weeklyDataMap);
+            renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings, packPerc, humanPerc);
+            renderWeeklyTrendChart(weeklyDataMap, currentWeekStr);
         }
 
-        function renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings) {
+        function renderDonutCharts(aiPackCount, aiHumanCount, activeBookings, evalBookings, packPerc = 0, humanPerc = 0) {
             if(productChartInstance) productChartInstance.destroy();
             const ctxProd = document.getElementById('productChart').getContext('2d');
             productChartInstance = new Chart(ctxProd, {
                 type: 'doughnut',
                 data: {
-                    labels: ['AI Pack', 'AI Human Assist'],
+                    labels: [`AI Pack (${packPerc}%)`, `AI Human Assist (${humanPerc}%)`],
                     datasets: [{
                         data: [aiPackCount, aiHumanCount],
                         backgroundColor: ['#00ffc0', '#ab4ef0'],
@@ -561,12 +618,13 @@
             });
         }
 
-        function renderWeeklyTrendChart(weeklyDataMap) {
-            // Sortieren der Wochen chronologisch
-            const sortedKeys = Array.from(weeklyDataMap.keys()).sort();
+        function renderWeeklyTrendChart(weeklyDataMap, currentWeekStr = null) {
+            // Sortieren der Wochen chronologisch (zwingend numerisch sortieren!)
+            const sortedKeys = Array.from(weeklyDataMap.keys()).sort((a, b) => a - b);
             
             const labels = [];
             const newBookingsData = [];
+            const churnData = [];
             const cumulativeMrrData = [];
             
             let currentCumMrr = 0;
@@ -574,10 +632,17 @@
             sortedKeys.forEach(timestamp => {
                 const data = weeklyDataMap.get(timestamp);
                 labels.push(getWeekString(data.date));
-                newBookingsData.push(data.count);
                 
-                currentCumMrr += data.mrr;
-                cumulativeMrrData.push(currentCumMrr);
+                newBookingsData.push(data.newCount);
+                // Kündigungen als negativen Wert (damit der Balken nach unten wächst)
+                churnData.push(-data.churnCount); 
+                
+                // Netto MRR kumulieren
+                currentCumMrr += data.newMrr;
+                currentCumMrr -= data.churnMrr;
+                
+                // KAUFMÄNNISCH RUNDEN, um Floating-Point Fehler im Tooltip rigoros zu vermeiden
+                cumulativeMrrData.push(Math.round(currentCumMrr));
             });
 
             if(weeklyChartInstance) weeklyChartInstance.destroy();
@@ -601,15 +666,68 @@
                         },
                         {
                             type: 'bar',
-                            label: 'Neue Buchungen (pro Woche)',
+                            label: 'Neue Buchungen (Anzahl)',
                             data: newBookingsData,
                             backgroundColor: '#ab4ef0',
                             borderRadius: 4,
                             yAxisID: 'y'
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Kündigungen (Anzahl)',
+                            data: churnData,
+                            backgroundColor: '#ff3366', // Rote Farbe für Churn wieder hinzugefügt
+                            borderRadius: 4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            // Dummy-Dataset, um den Eintrag "Datenstand" sauber in die Legende zu bekommen
+                            type: 'line',
+                            label: 'Datenstand',
+                            data: [], 
+                            borderColor: '#f0ff00',
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            backgroundColor: 'transparent',
+                            pointRadius: 0
                         }
                     ]
                 },
+                plugins: [{
+                    id: 'todayLine',
+                    // afterDatasetsDraw zeichnet die Linie HINTER dem Tooltip, aber VOR den Balken
+                    afterDatasetsDraw: chart => {
+                        if (!chart.config.options.plugins.todayLine) return;
+                        const weekStr = chart.config.options.plugins.todayLine.currentWeekStr;
+                        if (!weekStr) return;
+
+                        const yAxis = chart.scales.y;
+                        const ctx = chart.ctx;
+
+                        let index = chart.data.labels.indexOf(weekStr);
+                        if (index !== -1) {
+                            // Exakte Pixel-Koordinate des echten Datenpunkts holen
+                            const meta = chart.getDatasetMeta(0);
+                            if (!meta || !meta.data || !meta.data[index]) return;
+                            const x = meta.data[index].x;
+
+                            ctx.save();
+                            // Neongelbe Trennlinie
+                            ctx.beginPath();
+                            ctx.moveTo(x, yAxis.top);
+                            ctx.lineTo(x, yAxis.bottom);
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = '#f0ff00';
+                            ctx.setLineDash([4, 4]);
+                            ctx.stroke();
+                            ctx.restore();
+                        }
+                    }
+                }],
                 options: {
+                    layout: {
+                        padding: { top: 10 } 
+                    },
                     responsive: true,
                     maintainAspectRatio: false,
                     interaction: {
@@ -617,8 +735,60 @@
                         intersect: false,
                     },
                     plugins: {
-                        legend: { position: 'top', labels: { color: '#fff' } },
-                        tooltip: { backgroundColor: '#111111', titleColor: '#fff', bodyColor: '#ccc', borderColor: '#333', borderWidth: 1 }
+                        todayLine: {
+                            currentWeekStr: currentWeekStr
+                        },
+                        legend: { 
+                            position: 'top', 
+                            labels: { 
+                                color: '#fff',
+                                usePointStyle: true,
+                                generateLabels: function(chart) {
+                                    // Greift die Standard-Labels ab und modifiziert nur "Datenstand"
+                                    const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                                    labels.forEach(label => {
+                                        if (label.text === 'Datenstand') {
+                                            label.pointStyle = 'line';
+                                            label.lineWidth = 2;
+                                            label.lineDash = [4, 4];
+                                            label.strokeStyle = '#f0ff00';
+                                            label.fillStyle = 'transparent';
+                                        } else {
+                                            label.pointStyle = 'rectRounded';
+                                            label.lineWidth = 0;
+                                        }
+                                    });
+                                    return labels;
+                                }
+                            } 
+                        },
+                        tooltip: { 
+                            backgroundColor: '#111111', 
+                            titleColor: '#fff', 
+                            bodyColor: '#ccc', 
+                            borderColor: '#333', 
+                            borderWidth: 1,
+                            filter: function(tooltipItem) {
+                                // Verhindert, dass der Dummy-Eintrag im Hover-Tooltip auftaucht
+                                return tooltipItem.dataset.label !== 'Datenstand';
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) {
+                                        let val = Math.abs(context.parsed.y);
+                                        if (context.dataset.label === 'Kumulierter MRR (€)') {
+                                            // Saubere Formatierung mit echten Tausenderpunkten
+                                            label += new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(val) + ' €';
+                                        } else {
+                                            label += val;
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
                     },
                     scales: {
                         x: { 
@@ -630,7 +800,12 @@
                             display: true,
                             position: 'left',
                             grid: { color: '#333', drawBorder: false },
-                            ticks: { color: '#9ca3af', stepSize: 1 }
+                            ticks: { 
+                                color: '#9ca3af', 
+                                stepSize: 1,
+                                // Y-Achsen Beschriftung immer positiv, auch wenn Balken nach unten gehen
+                                callback: function(value) { return Math.abs(value); } 
+                            }
                         },
                         y1: {
                             type: 'linear',
@@ -654,7 +829,7 @@
 
             // Initiale leere Charts zeichnen
             renderDonutCharts(0, 0, 0, 0);
-            renderWeeklyTrendChart(new Map());
+            renderWeeklyTrendChart(new Map(), null);
         });
 
         // File Upload Handling
@@ -673,7 +848,8 @@
                 delimiter: ";",
                 skipEmptyLines: true,
                 complete: function(results) {
-                    processData(results.data);
+                    // file.lastModified mit übergeben, um die aktuelle Kalenderwoche für die Linie zu bestimmen
+                    processData(results.data, file.lastModified);
                 }
             });
         });
