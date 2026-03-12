@@ -206,13 +206,16 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
         
         <!-- Weekly Trend Chart -->
-        <div class="signature-border p-6 relative lg:col-span-2">
-            <div class="flex justify-between items-start mb-4">
+        <div class="signature-border p-6 relative lg:col-span-2 group">
+            <button onclick="openInfoModal('weeklyTrend')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+            <div class="flex justify-between items-start mb-4 pr-8">
                 <div>
                     <h3 class="text-lg font-bold">Wöchentliches Wachstum (KW-Trend)</h3>
                     <p class="text-xs text-gray-400 mt-1 max-w-md">Visualisiert den Zuwachs an gebuchten KI-Produkten pro Kalenderwoche (Balken) und den kumulierten Anstieg des MRR (Linie). Stichtag ist das Datum der Buchung.</p>
                 </div>
-                <span class="text-xs bg-gray-800 text-gray-300 py-1 px-2 rounded shrink-0">Historische Entwicklung</span>
+                <span class="text-xs bg-gray-800 text-gray-300 py-1 px-2 rounded shrink-0 hidden sm:inline-block">Historische Entwicklung</span>
             </div>
             <div class="h-64 relative w-full mt-2">
                 <canvas id="weeklyChart"></canvas>
@@ -221,16 +224,22 @@
 
         <div class="flex flex-col gap-6 lg:col-span-1">
             <!-- Chart 1: Product Distribution -->
-            <div class="signature-border p-6 relative flex-1">
-                <h3 class="text-md font-bold mb-2">Produkt-Verteilung</h3>
+            <div class="signature-border p-6 relative flex-1 group">
+                <button onclick="openInfoModal('productDist')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>
+                <h3 class="text-md font-bold mb-2 pr-6">Produkt-Verteilung</h3>
                 <div class="h-32 relative w-full flex justify-center">
                     <canvas id="productChart"></canvas>
                 </div>
             </div>
             
             <!-- Chart 2: Test vs Active -->
-            <div class="signature-border p-6 relative flex-1">
-                <h3 class="text-md font-bold mb-2">Vertrags-Status</h3>
+            <div class="signature-border p-6 relative flex-1 group">
+                <button onclick="openInfoModal('statusDist')" class="absolute top-4 right-4 text-gray-500 hover:text-ghCyan transition-colors focus:outline-none z-10" title="Details anzeigen">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>
+                <h3 class="text-md font-bold mb-2 pr-6">Vertrags-Status</h3>
                 <div class="h-32 relative w-full flex justify-center">
                     <canvas id="statusChart"></canvas>
                 </div>
@@ -245,21 +254,28 @@
     </footer>
 
     <!-- Info Modal (Floating & Draggable) -->
-    <div id="infoModal" class="fixed z-[100] hidden signature-border p-6 max-w-md w-full shadow-[0_0_40px_rgba(0,0,0,0.7)] bg-ghSurface border border-gray-800">
-        <!-- Header / Drag Handle -->
-        <div id="modalHeader" class="cursor-move pb-3 mb-4 border-b border-gray-800 flex justify-between items-center select-none" title="Fenster verschieben">
-            <h2 id="modalTitle" class="text-xl font-bold text-white text-gradient pointer-events-none">KPI Titel</h2>
-            <button type="button" onclick="closeInfoModal()" class="text-gray-500 hover:text-white focus:outline-none transition-colors" title="Schließen">
-                <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        
-        <div id="modalContent" class="text-gray-300 text-sm leading-relaxed space-y-3">
-            <!-- Text wird per JS eingefügt -->
-        </div>
-        
-        <div class="mt-6 text-right">
-            <button type="button" onclick="closeInfoModal()" class="btn-primary px-6 py-2 text-sm cursor-pointer">Schließen</button>
+    <div id="infoModal" class="fixed z-[100] hidden signature-border w-full max-w-md shadow-[0_20px_50px_rgba(0,0,0,0.8)]" style="top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 1px;">
+        <div class="bg-ghSurface rounded-[15px] overflow-hidden flex flex-col h-full w-full relative z-10">
+            <!-- Header / Drag Handle (komplett getrennt vom Close Button) -->
+            <div class="flex justify-between items-center border-b border-gray-800 bg-[#1a1a1a]">
+                <div id="modalHeader" class="flex-1 flex items-center gap-3 p-4 cursor-move" title="Zum Verschieben klicken und ziehen">
+                    <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24"><path d="M8 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM16 6a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM16 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM16 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>
+                    <h2 id="modalTitle" class="text-lg font-bold text-white text-gradient pointer-events-none">KPI Titel</h2>
+                </div>
+                <div class="p-3">
+                    <button type="button" onclick="closeInfoModal()" class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-gray-800 focus:outline-none transition-colors cursor-pointer" title="Schließen">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="modalContent" class="p-6 text-gray-300 text-sm leading-relaxed space-y-3">
+                <!-- Text wird per JS eingefügt -->
+            </div>
+            
+            <div class="px-6 py-5 text-right border-t border-gray-800 bg-[#111111]">
+                <button type="button" onclick="closeInfoModal()" class="btn-primary px-6 py-2 text-sm cursor-pointer">Schließen</button>
+            </div>
         </div>
     </div>
 
@@ -286,79 +302,80 @@
             'churn': {
                 title: 'Value-to-Churn',
                 text: '<p>Ein sehr spezifischer und wichtiger <strong>Warn-Indikator (Churn-Risiko)</strong>.</p><p>Diese Zahl summiert alle Verträge, bei denen das hinterlegte Datum unter <em>"Produkttest_bis"</em> exakt mit dem Datum unter <em>"Produkt_gekündigt_zum"</em> übereinstimmt.</p><p><strong>Bedeutung:</strong> Das sind Kunden, die das KI-Produkt ausprobiert haben, aber <em>direkt</em> zum Ende der kostenfreien Evaluierungsphase wieder kündigen. Sie haben während des Tests offensichtlich nicht genügend Mehrwert (Value) erkannt, um in das Bezahlmodell zu wechseln. Hier sollte Customer Success genauer hinschauen.</p>'
+            },
+            'weeklyTrend': {
+                title: 'Wöchentliches Wachstum (KW-Trend)',
+                text: '<p>Dieses Diagramm zeigt die <strong>Entwicklung der KI-Adoption</strong> über die Zeit.</p><ul class="list-disc pl-4 mt-2 space-y-1"><li><strong>Balken (Violett):</strong> Zeigen die absolute Anzahl der neu hinzugekommenen KI-Verträge in der jeweiligen Kalenderwoche.</li><li><strong>Linie (Cyan):</strong> Stellt das Wachstum des kumulierten KI-Umsatzes (MRR) im selben Zeitraum dar.</li></ul><p>Stichtag für die Zuordnung zu einer Kalenderwoche ist das exakte Datum der KI-Produktbuchung.</p>'
+            },
+            'productDist': {
+                title: 'Produkt-Verteilung',
+                text: '<p>Veranschaulicht den <strong>Share of Wallet</strong> innerhalb unseres KI-Portfolios.</p><p>Es zeigt das Verhältnis aller aktiven Verträge, aufgeteilt auf unsere beiden Hauptprodukte: <strong>AI Pack</strong> und <strong>AI Human Assist</strong>.</p><p>Das hilft uns im SteerCo schnell zu bewerten, welches der beiden Produkte aktuell stärker nachgefragt wird.</p>'
+            },
+            'statusDist': {
+                title: 'Vertrags-Status',
+                text: '<p>Gibt Aufschluss über die <strong>Verbindlichkeit</strong> der aktiven KI-Buchungen.</p><ul class="list-disc pl-4 mt-2 space-y-1"><li><strong>Feste Buchung:</strong> Kunden, die das Produkt regulär bezahlen (oder bei denen die Testphase beendet ist).</li><li><strong>Testphase:</strong> Kunden, die sich aktuell noch in einer vertraglich hinterlegten Evaluierungsphase befinden.</li></ul><p>Ein hoher Test-Anteil bedeutet hohes zukünftiges Umsatzpotenzial, erfordert aber aktuell noch engen Begleitschutz durch den Vertrieb oder Customer Success.</p>'
             }
         };
 
-        // Modal Steuerung
+        // Modal Steuerung & Dragging Logic
         const modal = document.getElementById('infoModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalContent = document.getElementById('modalContent');
+        const modalHeader = document.getElementById('modalHeader');
 
-        function openInfoModal(kpiKey) {
+        window.openInfoModal = function(kpiKey) {
             const data = kpiExplanations[kpiKey];
             if (data) {
-                modalTitle.innerHTML = data.title;
-                modalContent.innerHTML = data.text;
-                
-                // Modal einblenden
+                document.getElementById('modalTitle').innerHTML = data.title;
+                document.getElementById('modalContent').innerHTML = data.text;
                 modal.classList.remove('hidden');
-                
-                // Fenster beim allerersten Öffnen grob zentrieren, danach behält es die gezogene Position
-                if (!modal.style.top && !modal.style.left) {
-                    const rect = modal.getBoundingClientRect();
-                    modal.style.top = Math.max(20, (window.innerHeight / 2 - rect.height / 2)) + 'px';
-                    modal.style.left = Math.max(20, (window.innerWidth / 2 - rect.width / 2)) + 'px';
-                }
             }
-        }
+        };
 
-        function closeInfoModal() {
+        window.closeInfoModal = function() {
             modal.classList.add('hidden');
-        }
+        };
 
-        // Drag & Drop Logik für das Modal
-        dragElement(document.getElementById("infoModal"));
+        // Drag & Drop State
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
 
-        function dragElement(elmnt) {
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            const header = document.getElementById("modalHeader");
+        // Mousedown auf den Header-Bereich
+        modalHeader.addEventListener('mousedown', function(e) {
+            isDragging = true;
             
-            if (header) {
-                header.onmousedown = dragMouseDown;
-            }
+            // Verhindere globale Textauswahl während des Ziehens
+            document.body.style.userSelect = 'none';
 
-            function dragMouseDown(e) {
-                e = e || window.event;
-                // Klicks auf Buttons im Header nicht als "Ziehen" werten
-                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
-                
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            }
+            // Ermittle die exakte Position des Modals auf dem Bildschirm
+            const rect = modal.getBoundingClientRect();
+            
+            // Berechne den Offset der Maus relativ zur oberen linken Ecke des Modals
+            dragOffsetX = e.clientX - rect.left;
+            dragOffsetY = e.clientY - rect.top;
 
-            function elementDrag(e) {
-                e = e || window.event;
-                e.preventDefault();
-                // Neue Position berechnen
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                
-                // Element verschieben
-                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-            }
+            // Entferne CSS-Zentrierung (transform) und setze harte Pixelwerte
+            modal.style.transform = 'none';
+            modal.style.left = rect.left + 'px';
+            modal.style.top = rect.top + 'px';
+        });
 
-            function closeDragElement() {
-                // Dragging beenden, wenn Maus losgelassen wird
-                document.onmouseup = null;
-                document.onmousemove = null;
+        // Mousemove über das gesamte Dokument fangen
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            
+            // Neue Position: Maus-Position minus initialer Offset
+            modal.style.left = (e.clientX - dragOffsetX) + 'px';
+            modal.style.top = (e.clientY - dragOffsetY) + 'px';
+        });
+
+        // Mouseup beendet den Vorgang
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                // Textauswahl wieder erlauben
+                document.body.style.userSelect = '';
             }
-        }
+        });
 
         // --- Ende Modal Logik ---
 
